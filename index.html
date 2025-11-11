@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>테이프 오른쪽 고정, 내면 보이게 접기</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f5f5f5;
+            perspective: 1200px;
+        }
+
+        /* 전체 컨테이너 */
+        .sticker-wrapper {
+            position: relative;
+            width: 400px;
+            height: 100px;
+            transform-style: preserve-3d;
+        }
+
+        /* 고정된 오른쪽 20% */
+        .unpeeled-half {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 20%;
+            height: 100%;
+            background-image: url('tape.png');
+            background-size: 400px 100px;
+            background-position: -320px 0;
+            z-index: -100;
+        }
+
+        /* 접히는 왼쪽 80% (겉면 + 내면) */
+        .peel-half {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 80%;
+            height: 100%;
+            transform-origin: 100% 50%;
+            transform-style: preserve-3d;
+            transition: transform 2.3s cubic-bezier(0.45, 0.05, 0.55, 0.95);
+            cursor: pointer;
+        }
+
+        /* 겉면(front) */
+        .front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('tape.png');
+            background-size: 400px 100px;
+            background-position: 0 0;
+            backface-visibility: hidden;
+            transform: rotateY(0deg);
+        }
+
+        /* 내면(back) */
+        .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: url('tape.png');
+            background-size: 400px 100px;
+            background-position: 0 0;
+            transform: rotateY(180deg);
+            backface-visibility: hidden;
+            filter: brightness(1.2) saturate(0.9) contrast(0.9);
+        }
+
+        /* 접힘 상태 (앞쪽으로 덮이면서 내면이 사용자 쪽을 향함) */
+        .sticker-wrapper.peeled .peel-half {
+            transform: rotateY(180deg);
+        }
+
+
+        #paradox {
+            font-size: 20px;
+            position: absolute;
+            margin-top: 10%;
+            margin-left: 20%;
+            z-index: -100;
+        }
+
+        #portfolio {
+            font-size: 20px;
+            position: absolute;
+            margin-top: 10%;
+            margin-left: 50%;
+            z-index: -100;
+            text-decoration: none;
+
+        }
+    </style>
+</head>
+
+<body>
+    <div class="sticker-wrapper" id="stickerWrapper">
+        <div class="peel-half" id="peelArea">
+            <div class="front"></div>
+            <div class="back"></div>
+        </div>
+        <div class="unpeeled-half"></div>
+        <div id="paradox">모순 텍스트</div>
+        <a href="https://www.instagram.com/jangwooyou/" id="portfolio">작가</a>
+    </div>
+
+    <script>
+        const wrapper = document.getElementById('stickerWrapper');
+        const peelArea = document.getElementById('peelArea');
+
+        peelArea.addEventListener('click', () => {
+            wrapper.classList.toggle('peeled');
+        });
+    </script>
+</body>
+
+</html>
