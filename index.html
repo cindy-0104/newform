@@ -4,122 +4,208 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>테이프 오른쪽 고정, 내면 보이게 접기</title>
+    <title>Sticker Peel Effect - Transition (Hover) Only</title>
     <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
+        /*
+        ========================================
+        CSS 스타일: Transition (Hover)에 필요한 요소만 남김
+        ========================================
+        */
+        :root {
+            /* 사용된 이미지 URL만 정의 */
+            --img-bill: url('tape.png');
+        }
+
+        /* 애니메이션 제어를 위한 CSS Custom Property (Houdini) */
+        @property --dist {
+            syntax: '<percentage>';
+            initial-value: 0%;
+            inherits: true;
+        }
+
+        @property --angle {
+            syntax: '<number>';
+            initial-value: 0;
+            inherits: true;
+        }
+
+        @property --deg {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: true;
+        }
+
+        /* 기본 스타일 */
+        * {
+            font-family: Arial, sans-serif;
             margin: 0;
-            background: #f5f5f5;
-            perspective: 1200px;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        /* 전체 컨테이너 */
-        .sticker-wrapper {
+        body {
+            background-color: #343338;
+            color: white;
+            margin: 0;
+            padding: 50px 0;
+            display: flex;
+            /* 스티커 중앙 정렬용 */
+            justify-content: center;
+        }
+
+        figure {
+            display: inline-block;
+            padding: 0;
+            margin: 0;
+        }
+
+        figcaption {
+            text-align: center;
+            font-size: 11pt;
+            padding-top: 8px;
+        }
+
+        /* Sticker Core Styles */
+        .sticker {
+            /* 315도에 해당하는 라디안 값 */
+            --angle: -0.785398;
+            --angle-deg: calc(var(--angle) * 1rad);
+
+            display: inline-block;
             position: relative;
-            width: 400px;
-            height: 100px;
-            transform-style: preserve-3d;
+
+
+
+            transition: 1.2s z-index;
+            user-select: none;
         }
 
-        /* 고정된 오른쪽 20% */
-        .unpeeled-half {
+        .sticker>.inner {
+            --dist: 5%;
+            --remaining: calc(100% - var(--dist));
+
+            /* 벗겨지는 애니메이션 속성 */
+            transition-property: --dist, opacity;
+            transition-duration: 0.6s;
+            transition-timing-function: cubic-bezier(.68, .71, .33, 1.06);
+        }
+
+        .sticker img {
+            display: block;
+            max-width: 200px;
+
+
+
+            /* 스티커 이미지 마스킹 */
+            mask: linear-gradient(var(--angle-deg), black var(--remaining), transparent var(--remaining));
+            -webkit-mask-composite: destination-in;
+            mask-composite: intersect;
+        }
+
+        /* Content to reveal underneath sticker */
+        .sticker .reveal {
             position: absolute;
-            top: 0;
-            right: 0;
-            width: 20%;
-            height: 100%;
-            background-image: url('tape.png');
-            background-size: 400px 100px;
-            background-position: -320px 0;
-            z-index: -100;
+            inset: 0;
+            z-index: -1;
+            padding: 20px;
         }
 
-        /* 접히는 왼쪽 80% (겉면 + 내면) */
-        .peel-half {
+        /* Peel container (벗겨지는 모서리) */
+        .sticker .peel {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 80%;
-            height: 100%;
-            transform-origin: 100% 50%;
-            transform-style: preserve-3d;
-            transition: transform 2.3s cubic-bezier(0.45, 0.05, 0.55, 0.95);
-            cursor: pointer;
+            inset: 0;
+            pointer-events: none;
+
+            /* 좌상단 모서리 기준으로 설정 */
+            --ratio-x: -1;
+            --ratio-y: -1;
+
+            /* 벗겨지는 모서리의 위치 계산 */
+            transform:
+                translateX(calc(calc(var(--ratio-x) * var(--remaining)) + var(--dist))) translateY(calc(calc(var(--ratio-y) * var(--remaining)) + var(--dist)));
+
+            /* Peel mask */
+            mask: linear-gradient(var(--angle-deg), black var(--dist), transparent var(--dist));
+            -webkit-mask-composite: destination-in;
+            mask-composite: intersect;
         }
 
-        /* 겉면(front) */
-        .front {
+        /* Shadow beneath the peel */
+        .sticker .peel::after {
+            content: "";
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: url('tape.png');
-            background-size: 400px 100px;
-            background-position: 0 0;
-            backface-visibility: hidden;
-            transform: rotateY(0deg);
+            inset: 0;
+
+
+            background: linear-gradient(var(--angle-deg),
+                    transparent calc(var(--dist) - 15%),
+                    var(--shadow-color) var(--dist));
+
+
         }
 
-        /* 내면(back) */
-        .back {
+        /* Underside image (접착면) */
+        .sticker .peel>.inner {
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: url('tape.png');
-            background-size: 400px 100px;
-            background-position: 0 0;
-            transform: rotateY(180deg);
-            backface-visibility: hidden;
-            filter: brightness(1.2) saturate(0.9) contrast(0.9);
+            inset: 0;
+
+
+            /* Reversed image */
+            background-image: var(--img-bill);
+            /* 이미지를 직접 지정 */
+            background-size: contain;
+            transform: scale(-1, -1);
+
+            /* 접착면 필터 */
+            filter: contrast(10%) brightness(170%);
         }
 
-        /* 접힘 상태 (앞쪽으로 덮이면서 내면이 사용자 쪽을 향함) */
-        .sticker-wrapper.peeled .peel-half {
-            transform: rotateY(180deg);
+        /* Hover interaction */
+        .sticker:hover {
+            z-index: 1;
+        }
+
+        /* [핵심] 마우스 오버 시 벗겨짐 */
+        .sticker_peel:hover>.inner {
+            --dist: 90%;
+            /* 벗겨지는 정도 */
         }
 
 
-        #paradox {
-            font-size: 20px;
-            position: absolute;
-            margin-top: 10%;
-            margin-left: 20%;
-            z-index: -100;
-        }
 
-        #portfolio {
-            font-size: 20px;
-            position: absolute;
-            margin-top: 10%;
-            margin-left: 50%;
-            z-index: -100;
-            text-decoration: none;
 
+
+        .text {
+            top: 20%;
         }
     </style>
 </head>
 
 <body>
-    <div class="sticker-wrapper" id="stickerWrapper">
-        <div class="peel-half" id="peelArea">
-            <div class="front"></div>
-            <div class="back"></div>
-        </div>
-        <div class="unpeeled-half"></div>
-        <div id="paradox">모순 텍스트</div>
-        <a href="https://www.instagram.com/jangwooyou/" id="portfolio">작가</a>
-    </div>
+    <main class="container">
+        <figure>
+            <div class="sticker sticker_peel" style="--border: 9px solid white">
+                <div class="inner">
+                    <img src="tape.png" alt="" draggable="false">
+                    <div class="reveal">
 
-    <script>
-        const wrapper = document.getElementById('stickerWrapper');
-        const peelArea = document.getElementById('peelArea');
+                        <p>
+                        <div class="text"> 작가명 <a id=portfolio href="https://www.jangwooyou.com/">portfolio</a>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="peel">
+                        <div class="inner"></div>
+                    </div>
+                </div>
+            </div>
 
-        peelArea.addEventListener('click', () => {
-            wrapper.classList.toggle('peeled');
-        });
-    </script>
+            <figcaption>
+                Transition (hover)
+            </figcaption>
+        </figure>
+    </main>
+
 </body>
 
 </html>
