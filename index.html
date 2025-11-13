@@ -6,28 +6,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Image Replaced Text</title>
     <style>
-        * {
-            padding: 0;
-            margin: 0;
-            box-sizing: border-box;
-            /* 추가: 박스 모델 일관성 유지 */
-        }
-
         body {
-            height: 100vh;
-            width: 100vw;
-            background-color: #161616;
+            /* FIX: 절대적인 레이아웃 제거, 중앙 정렬을 위해 flex 사용 */
             display: flex;
+            flex-direction: column;
+
             justify-content: center;
-            align-items: center;
+
+
+
+
+
+            min-height: 100%;
+
+            align-content: center;
+            background-image: url(back1.jpg);
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+
         }
 
 
         header {
             display: flex;
-            height: 200px;
+            height: 300px;
             gap: 10px;
-            max-height: 5rem;
+            max-height: 10rem;
             /* 이미지 높이에 맞춰 조정 필요 */
             overflow: hidden;
             align-items: center;
@@ -36,40 +41,37 @@
 
 
 
-        .words img,
-        header>img {
-            max-height: 5rem;
+        .words img {
+            max-height: 10rem;
             overflow: hidden;
             display: block;
-            height: 90px;
-            height: 5rem;
+
+            height: 7rem;
             /* 텍스트 높이에 맞춰 이미지 높이 설정 */
 
             /* 비율 유지 */
             /* 이미지 색상은 이미지 자체에서 처리되므로 color: blue;는 더 이상 필요 없습니다. */
         }
 
-        /* bluetape_img 개별 스타일링 */
-        #bluetape_img {
-            /* FIX 3: bluetape_img가 header의 높이를 따르도록 명시 */
-            height: 100%;
-            width: auto;
-            display: block;
-        }
+
+
 
         .words {
             animation: spin-me ease-in-out;
             animation: spin-me 7s linear infinite;
-            /* 이미지 높이에 따라 translateY 값 조정 필요 */
         }
 
         @keyframes spin-me {
 
-            /* 이미지 높이(1.9rem)에 따라 translateY 값 조정 */
-            /* 1.9rem * 1 (off) + 1.9rem * 1 (dot) = 3.8rem. 180%가 대략 3.42rem */
-            /* 정확한 값은 이미지 높이에 따라 수동으로 조정해야 합니다. */
-            20% {
+            0%,
+            5% {
+
+                opacity: 0%;
+            }
+
+            15% {
                 transform: translateY(35%);
+                opacity: 100%;
 
             }
 
@@ -80,29 +82,58 @@
 
             60% {
                 transform: translateY(-35%);
-                animation-delay: 3s;
+
+
                 /* 2칸 위로 이동 (off + dot) */
             }
 
             90% {
                 transform: translateY(-35%);
+                opacity: 100%;
                 /* 2칸 위로 이동 (off + dot) */
             }
+
+            99%,
+            100% {
+
+                opacity: 0%;
+                /* 2칸 위로 이동 (off + dot) */
+            }
+        }
+
+        #aa1 {
+            color: aliceblue;
+
+
+
+        }
+
+        #bluetape_img {
+            height: 200px;
+            top: -20%;
         }
     </style>
 </head>
 
 <body>
     <div id="root">
-        <header>
-            <img id="bluetape_img" src="bluetape.png" alt="bluetape">
-            <div class="words">
-                <img src="off1.png" alt="off1">
-                <img id="dot_image" src="dot_image.png" alt="">
-                <img src="gap.png" alt="">
-            </div>
-        </header>
     </div>
+
+    <img id="bluetape_img" src="bluetape.png" alt="bluetape">
+    <header>
+        <div class="words">
+            <img src="off1.png" alt="off1">
+            <img id="dot_image" src="dot_image.png" alt="">
+            <img src="gap.png" alt="">
+
+
+
+
+
+    </header>
+    </div>
+    <p> <a id="aa1" href="aa1.html">click</a></p>
+
 </body>
 
 </html>
