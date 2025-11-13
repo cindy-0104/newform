@@ -4,16 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sticker Peel Effect - Transition (Hover) Only</title>
+    <title>Sticker Peel Effect - 내면 강조 & 프레임 제거</title>
     <style>
         /*
         ========================================
-        CSS 스타일: Transition (Hover)에 필요한 요소만 남김
+        CSS 스타일
         ========================================
         */
         :root {
             /* 사용된 이미지 URL만 정의 */
             --img-bill: url('tape.png');
+            --shadow-color: rgba(0, 0, 0, 0.4);
+            /* 그림자 색상 약간 진하게 조정 */
+            --border-radius: 10px;
+            --peel-duration: 0.6s;
         }
 
         /* 애니메이션 제어를 위한 CSS Custom Property (Houdini) */
@@ -49,7 +53,6 @@
             margin: 0;
             padding: 50px 0;
             display: flex;
-            /* 스티커 중앙 정렬용 */
             justify-content: center;
         }
 
@@ -57,6 +60,7 @@
             display: inline-block;
             padding: 0;
             margin: 0;
+            position: relative;
         }
 
         figcaption {
@@ -67,16 +71,16 @@
 
         /* Sticker Core Styles */
         .sticker {
-            /* 315도에 해당하는 라디안 값 */
             --angle: -0.785398;
             --angle-deg: calc(var(--angle) * 1rad);
 
-            display: inline-block;
+
             position: relative;
 
+            overflow: hidden;
+            cursor: pointer;
 
-
-            transition: 1.2s z-index;
+            transition: 3s z-index;
             user-select: none;
         }
 
@@ -84,9 +88,8 @@
             --dist: 5%;
             --remaining: calc(100% - var(--dist));
 
-            /* 벗겨지는 애니메이션 속성 */
             transition-property: --dist, opacity;
-            transition-duration: 0.6s;
+            transition-duration: 3s;
             transition-timing-function: cubic-bezier(.68, .71, .33, 1.06);
         }
 
@@ -94,9 +97,12 @@
             display: block;
             max-width: 200px;
 
+            /* border: var(--border); <- [삭제] 테이프 프레임 제거 */
 
+            position: relative;
+            z-index: 1;
+            /* 스티커 겉면 */
 
-            /* 스티커 이미지 마스킹 */
             mask: linear-gradient(var(--angle-deg), black var(--remaining), transparent var(--remaining));
             -webkit-mask-composite: destination-in;
             mask-composite: intersect;
@@ -106,9 +112,36 @@
         .sticker .reveal {
             position: absolute;
             inset: 0;
-            z-index: -1;
-            padding: 20px;
+            z-index: 0;
+            /* 이미지 뒤에 위치 */
+
+
+            color: #ccc;
+
+            display: flex;
+
+            justify-content: center;
+            align-items: center;
+            text-align: center;
         }
+
+        /* 텍스트 컨테이너 (링크 포함) 스타일 */
+        .sticker .reveal>div {
+            font-size: 1.2em;
+            line-height: 1.5;
+            opacity: 0;
+            /* 평소에는 텍스트 숨김 */
+            transition: opacity 3s ease var(--peel-duration);
+        }
+
+        /* 하이퍼링크 스타일 */
+        .sticker .reveal a {
+            color: #ffcc00;
+            text-decoration: none;
+            pointer-events: none;
+            /* 기본적으로 클릭 불가 */
+        }
+
 
         /* Peel container (벗겨지는 모서리) */
         .sticker .peel {
@@ -116,32 +149,28 @@
             inset: 0;
             pointer-events: none;
 
-            /* 좌상단 모서리 기준으로 설정 */
             --ratio-x: -1;
             --ratio-y: -1;
 
-            /* 벗겨지는 모서리의 위치 계산 */
             transform:
                 translateX(calc(calc(var(--ratio-x) * var(--remaining)) + var(--dist))) translateY(calc(calc(var(--ratio-y) * var(--remaining)) + var(--dist)));
 
-            /* Peel mask */
             mask: linear-gradient(var(--angle-deg), black var(--dist), transparent var(--dist));
-            -webkit-mask-composite: destination-in;
-            mask-composite: intersect;
+            -webkit-mask-composite: destination-out;
+            mask-composite: var(--angle);
         }
 
         /* Shadow beneath the peel */
         .sticker .peel::after {
             content: "";
             position: absolute;
-            inset: 0;
 
 
             background: linear-gradient(var(--angle-deg),
                     transparent calc(var(--dist) - 15%),
                     var(--shadow-color) var(--dist));
 
-
+            /* border: var(--border); <- [삭제] 테이프 프레임 제거 */
         }
 
         /* Underside image (접착면) */
@@ -150,19 +179,30 @@
             inset: 0;
 
 
-            /* Reversed image */
             background-image: var(--img-bill);
-            /* 이미지를 직접 지정 */
             background-size: contain;
-            transform: scale(-1, -1);
 
-            /* 접착면 필터 */
-            filter: contrast(10%) brightness(170%);
+
+
+            opacity: 0;
+            animation: tape 3.6s ease-out;
+        }
+
+        @keyframes tape {
+            0% {
+                opacity: 100%;
+
+            }
+
+            100% {
+                opacity: 0%;
+
+            }
         }
 
         /* Hover interaction */
         .sticker:hover {
-            z-index: 1;
+            z-index: 10;
         }
 
         /* [핵심] 마우스 오버 시 벗겨짐 */
@@ -171,12 +211,25 @@
             /* 벗겨지는 정도 */
         }
 
+        /* [핵심] 벗겨진 상태에서 텍스트와 링크 활성화 */
+        .sticker_peel:hover .reveal>div {
+            opacity: 1;
+            /* 텍스트가 드러남 */
+        }
 
+        /* [클릭 FIX] 스티커가 벗겨질 때 reveal의 z-index를 높여 클릭 가능하게 합니다. */
+        .sticker_peel:hover .reveal {
+            z-index: 15;
+        }
 
-
+        .sticker_peel:hover .reveal a {
+            pointer-events: auto;
+            /* 링크 클릭 활성화 */
+            transition: pointer-events 3s linear var(--peel-duration);
+        }
 
         .text {
-            top: 20%;
+            top: 100%;
         }
     </style>
 </head>
@@ -184,16 +237,16 @@
 <body>
     <main class="container">
         <figure>
-            <div class="sticker sticker_peel" style="--border: 9px solid white">
+            <div class="sticker sticker_peel">
                 <div class="inner">
                     <img src="tape.png" alt="" draggable="false">
-                    <div class="reveal">
 
-                        <p>
-                        <div class="text"> 작가명 <a id=portfolio href="https://www.jangwooyou.com/">portfolio</a>
-                            </p>
+                    <div class="reveal">
+                        <div>
+                            작가명 <a id="portfolio" href="https://www.jangwooyou.com/" target="_blank">portfolio</a>
                         </div>
                     </div>
+
                     <div class="peel">
                         <div class="inner"></div>
                     </div>
