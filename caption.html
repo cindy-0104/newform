@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>작품 설명</title>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gugi&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Black Han Sans', sans-serif;
@@ -26,7 +27,7 @@
             background: rgb(255, 255, 219);
 
             font-size: 13px;
-
+            opacity: 0.7;
             line-height: 1.5;
             border-radius: 10px;
             width: 80%;
@@ -34,10 +35,10 @@
             box-shadow: 5px 3px 30px rgb(110, 101, 3);
             overflow: hidden;
             padding-bottom: 20px;
-            animation: blink 5s, ease-in-out;
+            animation: caption 3s, ease-in-out;
         }
 
-        @keyframes blink {
+        @keyframes caption {
             0% {
                 opacity: 0%
             }
@@ -74,13 +75,28 @@
             font-style: italic;
         }
 
+        #opening {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #c0a33c;
+            z-index: 1000;
+            text-shadow: 2px 3px 4px #162030;
+
+            text-decoration: none;
+
+
+        }
+
         @import url(https://fonts.googleapis.com/css?family=Lora);
     </style>
 </head>
 
 <body>
 
-    <div></div>
+    <div></div> <a id="opening" href="all.html">back</a>
     <main>
         <cite>
             <p>거룩한 대화</p>
@@ -90,6 +106,7 @@
             어려운 미묘한 마음의 흔들림을 잡아낸다. 결국 작가가 형상화하는 것은 작가 자신의 ‘내밀한’ 감정들이다.
 
         </blockquote>
+
     </main>
 </body>
 

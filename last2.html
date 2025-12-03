@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>저장된 답변 목록</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gugi&display=swap" rel="stylesheet">
+
+    <style>
+        /* ===== 기본 스타일 ===== */
+        body {
+            background: #06152f;
+            /* Wargames 배경 */
+            color: #ffffff;
+            font-family: 'Black Han Sans', 'Gugi', sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /* 스크롤바 방지 */
+            height: 100vh;
+            /* 뷰포트 전체 높이 사용 */
+            position: relative;
+        }
+
+        h3 {
+            font-size: 25px;
+            font-family: 'Black Han Sans', sans-serif;
+            color: #ffdf0e;
+            text-shadow: 0 0 8px #ffdf0e;
+            margin-top: 30px;
+            position: relative;
+            z-index: 100;
+        }
+
+        #list {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ===== 둥둥 떠다니는 텍스트 스타일 ===== */
+        #list div {
+            font-size: clamp(14px, 2.5vw, 22px);
+            padding: 8px;
+            margin: 0;
+            position: absolute;
+
+            /* **수정: 텍스트가 길 때 자동으로 줄바꿈되도록 white-space 제거** */
+            max-width: 90%;
+            /* **수정: 화면 너비의 90%를 초과하지 않도록 제한** */
+
+            will-change: transform, opacity;
+
+            /* WARGAMES 스타일 텍스트 광택 */
+            color: #d9ecff;
+            text-shadow: 0 0 5px #ffdf0e;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h3>TAPE OFF:</h3>
+
+    <div id="list"></div>
+
+    <script>
+        const stored = JSON.parse(localStorage.getItem('answers') || '[]');
+        const list = document.getElementById('list');
+        const shuffled = stored.sort(() => Math.random() - 0.5);
+        const selected = shuffled.slice(0, 10);
+
+        const placedElementsBounds = [];
+
+        // **수정: 텍스트의 너비를 최대 90vw로 고정하고 충돌 체크를 위해 40vw로 가정**
+        const APPROX_WIDTH = 40; // 겹침 체크를 위한 임의의 너비
+        const APPROX_HEIGHT = 8; // 8vh
+
+        // 충돌 확인 (안전 마진 포함)
+        function checkCollision(x, y, width, height) {
+            const safetyMargin = 5; // 5vw/vh 안전 마진
+            for (const b of placedElementsBounds) {
+                // 새로운 요소의 너비와 높이, 안전 마진을 고려하여 충돌 확인
+                const collX = (x < b.x + b.width + safetyMargin) && (x + width > b.x - safetyMargin);
+                const collY = (y < b.y + b.height + safetyMargin) && (y + height > b.y - safetyMargin);
+                if (collX && collY) return true;
+            }
+            return false;
+        }
+
+        // ✨ 랜덤 이동 경로 및 회전 효과 만드는 함수
+        function generateFloatKeyframes(id) {
+            const dx = (Math.random() * 30 - 15); // -15vw ~ +15vw
+            const dy = (Math.random() * 30 - 15); // -15vh ~ +15vh
+            const dRot = (Math.random() * 4 - 2);  // -2deg ~ +2deg
+
+            return `
+        @keyframes float_${id} {
+            0%   { transform: translate(0, 0) rotate(0deg); opacity: 0.9; }
+            50%  { transform: translate(${dx}vw, ${dy}vh) rotate(${dRot}deg); opacity: 1; }
+            100% { transform: translate(0, 0) rotate(0deg); opacity: 0.9; }
+        }`;
+        }
+
+        // ✨ 스타일 태그 동적 추가
+        const styleTag = document.createElement("style");
+        document.head.appendChild(styleTag);
+
+        selected.forEach((txt, index) => {
+            const div = document.createElement('div');
+            div.textContent = txt;
+            list.appendChild(div);
+
+            const approxWidth = APPROX_WIDTH;
+            const approxHeight = APPROX_HEIGHT;
+
+            let left, top, tries = 50;
+            while (tries--) {
+                // **수정: left 위치의 최대값은 90%에서 최대 너비 제한(90%)을 고려하여 설정**
+                const maxLeft = 90 - (div.style.maxWidth ? parseFloat(div.style.maxWidth) : 10); // 약 80vw가 최대 왼쪽 시작점
+
+                left = 5 + Math.random() * maxLeft; // 5vw ~ maxLeft
+                top = 15 + Math.random() * (75 - approxHeight); // 15vh ~ 75vh
+
+                if (!checkCollision(left, top, approxWidth, approxHeight)) {
+                    div.style.left = `${left}vw`;
+                    div.style.top = `${top}vh`;
+
+                    placedElementsBounds.push({ x: left, y: top, width: approxWidth, height: approxHeight });
+                    break;
+                }
+            }
+
+            // 요소마다 다른 애니메이션 생성
+            const keyframeCSS = generateFloatKeyframes(index);
+            styleTag.innerHTML += keyframeCSS;
+
+            const duration = 18 + Math.random() * 12; // 18~30초
+            const delay = Math.random() * 5;          // 0~5초
+
+            div.style.animation = `float_${index} ${duration}s ease-in-out ${delay}s infinite alternate`;
+        });
+    </script>
+
+</body>
+
+</html>

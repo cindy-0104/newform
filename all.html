@@ -4,13 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sticker Peel Effect - 내면 강조 & 프레임 제거</title>
+    <title>작가 리스트</title>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gugi&display=swap" rel="stylesheet">
     <style>
         /*
         ========================================
         CSS 스타일
         ========================================
         */
+
+
         :root {
             /* 사용된 이미지 URL만 정의 */
             --img-bill: url('tape.png');
@@ -41,7 +44,7 @@
 
         /* 기본 스타일 */
         * {
-            font-family: Arial, sans-serif;
+
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -54,6 +57,7 @@
             padding: 50px 0;
             display: flex;
             justify-content: center;
+            font-family: 'Black Han Sans', sans-serif;
         }
 
         figure {
@@ -231,10 +235,26 @@
         #caption {
             color: white;
         }
+
+        #opening {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 20px;
+            color: #c0a33c;
+            z-index: 1000;
+            text-shadow: 2px 3px 4px #162030;
+
+            text-decoration: none;
+
+
+        }
     </style>
 </head>
 
 <body>
+    <a id="opening" href="last.html">next</a>
     <main class="container">
         <figure>
             <div class="sticker sticker_peel">
