@@ -6,24 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>작가 리스트</title>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gugi&display=swap" rel="stylesheet">
+
     <style>
-        /*
-        ========================================
-        CSS 스타일
-        ========================================
-        */
-
-
         :root {
-            /* 사용된 이미지 URL만 정의 */
             --img-bill: url('tape.png');
             --shadow-color: rgba(0, 0, 0, 0.4);
-            /* 그림자 색상 약간 진하게 조정 */
             --border-radius: 10px;
-            --peel-duration: 0.6s;
+            --peel-duration: 3s;
         }
 
-        /* 애니메이션 제어를 위한 CSS Custom Property (Houdini) */
         @property --dist {
             syntax: '<percentage>';
             initial-value: 0%;
@@ -42,9 +33,7 @@
             inherits: true;
         }
 
-        /* 기본 스타일 */
         * {
-
             margin: 0;
             padding: 0;
             box-sizing: border-box;
@@ -73,17 +62,13 @@
             padding-top: 8px;
         }
 
-        /* Sticker Core Styles */
+        /* ---------------------- 스티커 기본 ---------------------- */
         .sticker {
             --angle: -0.785398;
             --angle-deg: calc(var(--angle) * 1rad);
-
-
             position: relative;
-
             overflow: hidden;
             cursor: pointer;
-
             transition: 3s z-index;
             user-select: none;
         }
@@ -91,103 +76,73 @@
         .sticker>.inner {
             --dist: 5%;
             --remaining: calc(100% - var(--dist));
-
             transition-property: --dist, opacity;
-            transition-duration: 3s;
+            transition-duration: var(--peel-duration);
             transition-timing-function: cubic-bezier(.68, .71, .33, 1.06);
         }
 
         .sticker img {
             display: block;
             max-width: 200px;
-
-            /* border: var(--border); <- [삭제] 테이프 프레임 제거 */
-
             position: relative;
             z-index: 1;
-            /* 스티커 겉면 */
-
             mask: linear-gradient(var(--angle-deg), black var(--remaining), transparent var(--remaining));
             -webkit-mask-composite: destination-in;
             mask-composite: intersect;
         }
 
-        /* Content to reveal underneath sticker */
+        /* ---------------------- reveal ---------------------- */
         .sticker .reveal {
             position: absolute;
             inset: 0;
             z-index: 0;
-            /* 이미지 뒤에 위치 */
-
-
             color: #ccc;
-
             display: flex;
-
             justify-content: center;
             align-items: center;
             text-align: center;
         }
 
-        /* 텍스트 컨테이너 (링크 포함) 스타일 */
         .sticker .reveal>div {
             font-size: 1.2em;
             line-height: 1.5;
             opacity: 0;
-            /* 평소에는 텍스트 숨김 */
-            transition: opacity 3s ease var(--peel-duration);
+            transition: opacity var(--peel-duration) ease;
         }
 
-        /* 하이퍼링크 스타일 */
         .sticker .reveal a {
             color: #ffcc00;
             text-decoration: none;
             pointer-events: none;
-            /* 기본적으로 클릭 불가 */
         }
 
-
-        /* Peel container (벗겨지는 모서리) */
+        /* ---------------------- 테이프 peel 부분 ---------------------- */
         .sticker .peel {
             position: absolute;
             inset: 0;
-            pointer-events: none;
-
             --ratio-x: -1;
             --ratio-y: -1;
-
+            pointer-events: auto;
             transform:
                 translateX(calc(calc(var(--ratio-x) * var(--remaining)) + var(--dist))) translateY(calc(calc(var(--ratio-y) * var(--remaining)) + var(--dist)));
-
             mask: linear-gradient(var(--angle-deg), black var(--dist), transparent var(--dist));
             -webkit-mask-composite: destination-out;
             mask-composite: var(--angle);
         }
 
-        /* Shadow beneath the peel */
         .sticker .peel::after {
             content: "";
             position: absolute;
-
-
             background: linear-gradient(var(--angle-deg),
                     transparent calc(var(--dist) - 15%),
                     var(--shadow-color) var(--dist));
-
-            /* border: var(--border); <- [삭제] 테이프 프레임 제거 */
         }
 
-        /* Underside image (접착면) */
         .sticker .peel>.inner {
             position: absolute;
             inset: 0;
-
-
             background-image: var(--img-bill);
             background-size: contain;
-
-
-
             opacity: 0;
             animation: tape 3.6s ease-out;
         }
@@ -195,45 +150,65 @@
         @keyframes tape {
             0% {
                 opacity: 100%;
-
             }
 
             70% {
                 opacity: 10%;
-
             }
         }
 
-        /* Hover interaction */
+        /* ---------------------- hover로 벗겨지는 효과 ---------------------- */
         .sticker:hover {
             z-index: 10;
         }
 
-        /* [핵심] 마우스 오버 시 벗겨짐 */
         .sticker_peel:hover>.inner {
             --dist: 90%;
-            /* 벗겨지는 정도 */
         }
 
-        /* [핵심] 벗겨진 상태에서 텍스트와 링크 활성화 */
         .sticker_peel:hover .reveal>div {
             opacity: 1;
-            /* 텍스트가 드러남 */
         }
 
-        /* [클릭 FIX] 스티커가 벗겨질 때 reveal의 z-index를 높여 클릭 가능하게 합니다. */
         .sticker_peel:hover .reveal {
             z-index: 15;
         }
 
         .sticker_peel:hover .reveal a {
             pointer-events: auto;
-            /* 링크 클릭 활성화 */
-            transition: pointer-events 3s linear var(--peel-duration);
+            transition: pointer-events 0s linear var(--peel-duration);
         }
 
-        #caption {
-            color: white;
+        /* ---------------------- 뒤로 왔을때: 완전히 벗겨진 상태 ---------------------- */
+        .sticker_peel.peeled>.inner {
+            --dist: 100% !important;
+            transition: none !important;
+        }
+
+        .sticker_peel.peeled img {
+            opacity: 0 !important;
+            transition: none !important;
+        }
+
+        .sticker_peel.peeled .reveal>div {
+            opacity: 1 !important;
+            transition: none !important;
+        }
+
+        .sticker_peel.peeled .reveal a {
+            pointer-events: auto !important;
+        }
+
+        /* 테이프가 있을 때는 클릭 막기 */
+        .sticker .peel,
+        .sticker .peel>.inner {
+            pointer-events: auto !important;
+        }
+
+        /* 벗겨진 상태에서는 아래 링크 클릭 허용 */
+        .sticker_peel.peeled .peel,
+        .sticker_peel.peeled .peel>.inner {
+            pointer-events: none !important;
         }
 
         #opening {
@@ -245,16 +220,18 @@
             color: #c0a33c;
             z-index: 1000;
             text-shadow: 2px 3px 4px #162030;
-
             text-decoration: none;
+        }
 
-
+        #caption {
+            color: white;
         }
     </style>
 </head>
 
 <body>
     <a id="opening" href="last.html">next</a>
+
     <main class="container">
         <figure>
             <div class="sticker sticker_peel">
@@ -264,8 +241,7 @@
                     <div class="reveal">
                         <div>
                             <a id="portfolio" href="https://www.jangwooyou.com/" target="_blank">김경서</a>
-                            <a id="caption" href="caption.html">거룩한 대화 </a>
-
+                            <a id="caption" href="caption.html">거룩한 대화</a>
                         </div>
                     </div>
 
@@ -283,6 +259,54 @@
             </figcaption>
         </figure>
     </main>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const sticker = document.querySelector(".sticker_peel");
+            const links = document.querySelectorAll(".sticker_peel .reveal a");
+
+            /* 🔥 1) RELOAD 인 경우에만 peeled 상태 초기화 */
+            try {
+                const nav = performance.getEntriesByType("navigation")[0];
+                if (nav && nav.type === "reload") {
+                    sessionStorage.removeItem("peeled");
+                }
+            } catch (e) {
+                // 일부 브라우저 fallback
+                if (performance.navigation.type === 1) {
+                    sessionStorage.removeItem("peeled");
+                }
+            }
+
+            /* 🔥 2) peeled 상태 적용 */
+            function applyPeeled() {
+                if (!sticker) return;
+                if (sessionStorage.getItem("peeled") === "1") {
+                    sticker.classList.add("peeled");
+                }
+            }
+
+            applyPeeled();
+
+            /* 🔥 3) pageshow — 뒤로가기(bfcache 복원) 시에도 상태 유지 */
+            window.addEventListener("pageshow", () => {
+                applyPeeled();
+            });
+
+            /* 🔥 4) 링크 클릭하면 peeled 저장 */
+            links.forEach(link => {
+                link.addEventListener("click", () => {
+                    sessionStorage.setItem("peeled", "1");
+                });
+            });
+
+            /* 🔥 5) 스티커 클릭해서 벗겨도 peeled 저장 (필수 아닐 수 있음) */
+            sticker.addEventListener("click", () => {
+                sessionStorage.setItem("peeled", "1");
+            });
+        });
+    </script>
+
 
 </body>
 

@@ -30,7 +30,7 @@
             font-family: 'Black Han Sans', sans-serif;
             color: #ffdf0e;
             text-shadow: 0 0 8px #ffdf0e;
-            margin-top: 30px;
+            top: 10%;
             position: relative;
             z-index: 100;
         }
@@ -78,15 +78,15 @@
 
         const placedElementsBounds = [];
 
-        // **수정: 텍스트의 너비를 최대 90vw로 고정하고 충돌 체크를 위해 40vw로 가정**
-        const APPROX_WIDTH = 40; // 겹침 체크를 위한 임의의 너비
-        const APPROX_HEIGHT = 8; // 8vh
+        function getApproxWidth(text) {
+            const baseWidth = 10;
+            const lengthFactor = text.length * 0.8;
+            return Math.min(40, baseWidth + lengthFactor);
+        }
 
-        // 충돌 확인 (안전 마진 포함)
         function checkCollision(x, y, width, height) {
-            const safetyMargin = 5; // 5vw/vh 안전 마진
+            const safetyMargin = 3;
             for (const b of placedElementsBounds) {
-                // 새로운 요소의 너비와 높이, 안전 마진을 고려하여 충돌 확인
                 const collX = (x < b.x + b.width + safetyMargin) && (x + width > b.x - safetyMargin);
                 const collY = (y < b.y + b.height + safetyMargin) && (y + height > b.y - safetyMargin);
                 if (collX && collY) return true;
@@ -94,17 +94,16 @@
             return false;
         }
 
-        // ✨ 랜덤 이동 경로 및 회전 효과 만드는 함수
+        // ✨ 랜덤 이동 경로 만드는 함수
         function generateFloatKeyframes(id) {
-            const dx = (Math.random() * 30 - 15); // -15vw ~ +15vw
-            const dy = (Math.random() * 30 - 15); // -15vh ~ +15vh
-            const dRot = (Math.random() * 4 - 2);  // -2deg ~ +2deg
+            const dx = (Math.random() * 40 - 20); // -20vw ~ +20vw
+            const dy = (Math.random() * 40 - 20); // -20vh ~ +20vh
 
             return `
         @keyframes float_${id} {
-            0%   { transform: translate(0, 0) rotate(0deg); opacity: 0.9; }
-            50%  { transform: translate(${dx}vw, ${dy}vh) rotate(${dRot}deg); opacity: 1; }
-            100% { transform: translate(0, 0) rotate(0deg); opacity: 0.9; }
+            0%   { transform: translate(0, 0); }
+            50%  { transform: translate(${dx}vw, ${dy}vh); }
+            100% { transform: translate(0, 0); }
         }`;
         }
 
@@ -117,16 +116,13 @@
             div.textContent = txt;
             list.appendChild(div);
 
-            const approxWidth = APPROX_WIDTH;
-            const approxHeight = APPROX_HEIGHT;
+            const approxWidth = getApproxWidth(txt);
+            const approxHeight = 8;
 
             let left, top, tries = 50;
             while (tries--) {
-                // **수정: left 위치의 최대값은 90%에서 최대 너비 제한(90%)을 고려하여 설정**
-                const maxLeft = 90 - (div.style.maxWidth ? parseFloat(div.style.maxWidth) : 10); // 약 80vw가 최대 왼쪽 시작점
-
-                left = 5 + Math.random() * maxLeft; // 5vw ~ maxLeft
-                top = 15 + Math.random() * (75 - approxHeight); // 15vh ~ 75vh
+                left = 5 + Math.random() * (90 - approxWidth);
+                top = 15 + Math.random() * (75 - approxHeight);
 
                 if (!checkCollision(left, top, approxWidth, approxHeight)) {
                     div.style.left = `${left}vw`;
@@ -141,10 +137,10 @@
             const keyframeCSS = generateFloatKeyframes(index);
             styleTag.innerHTML += keyframeCSS;
 
-            const duration = 18 + Math.random() * 12; // 18~30초
-            const delay = Math.random() * 5;          // 0~5초
+            const duration = 15 + Math.random() * 15; // 15~30초
+            const delay = Math.random() * 4;          // 0~4초
 
-            div.style.animation = `float_${index} ${duration}s ease-in-out ${delay}s infinite alternate`;
+            div.style.animation = `float_${index} ${duration}s ease-in-out ${delay}s infinite`;
         });
     </script>
 

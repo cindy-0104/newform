@@ -2,211 +2,243 @@
 <html lang="ko">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>질문 입력</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gugi&display=swap" rel="stylesheet">
+    <!-- Google Font: Black Han Sans -->
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 
     <style>
+        /* 1) 모든 텍스트 요소에 폰트 명시 (우선 적용) */
+        :root {
+            --wfont: 'Black Han Sans', system-ui, -apple-system, "Segoe UI",
+                Roboto, "Noto Sans KR", "Helvetica Neue", "Apple SD Gothic Neo",
+                "Malgun Gothic", sans-serif;
+        }
+
+        html,
+        body,
+        div,
+        span,
+        applet,
+        object,
+        iframe,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p,
+        blockquote,
+        pre,
+        a,
+        abbr,
+        acronym,
+        address,
+        big,
+        cite,
+        code,
+        del,
+        dfn,
+        em,
+        img,
+        ins,
+        kbd,
+        q,
+        s,
+        samp,
+        small,
+        strike,
+        strong,
+        sub,
+        sup,
+        tt,
+        var,
+        b,
+        u,
+        i,
+        center,
+        dl,
+        dt,
+        dd,
+        ol,
+        ul,
+        li,
+        fieldset,
+        form,
+        label,
+        legend,
+        table,
+        caption,
+        tbody,
+        tfoot,
+        thead,
+        tr,
+        th,
+        td,
+        input,
+        textarea,
+        button {
+            font-family: var(--wfont);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* 2) <pre><code> 기본 monospace 강제 해제 (inherit) */
+        pre,
+        code,
+        kbd,
+        samp {
+            font-family: var(--wfont);
+            white-space: pre-wrap;
+            /* 줄바꿈 허용 (원하지 않으면 pre로 되돌리세요) */
+        }
+
+        /* ===== 모바일 최적화 기본 설정 ===== */
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             background: #06152f;
-            /* 모든 텍스트의 기본 폰트를 'Black Han Sans'로 통일 */
-            font-family: 'Black Han Sans', sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
+            color: #f1bd00;
         }
 
-        /* ===== WARGAMES 박스 디자인 ===== */
+        /* ===== 메인 박스 ===== */
         #wargames {
             width: 100%;
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
+            padding: 5vw 4vw;
             position: relative;
-            overflow: hidden;
-            padding: 10px;
-            border-radius: 8px;
+
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
+            border-radius: 12px;
+
             box-shadow:
-                0px 0px 0 rgb(194, 197, 198),
-                0px 1px 0 rgb(191, 194, 195),
-                0px 2px 0 rgb(189, 192, 193),
-                0px 3px 0 rgb(186, 189, 190),
-                0px 4px 0 rgb(183, 186, 187),
-                0px 5px 0 rgb(180, 183, 184),
-                0px 6px 0 rgb(178, 181, 182),
-                0px 7px 0 rgb(175, 178, 179),
-                0px 8px 0 rgb(172, 175, 176),
-                0px 9px 0 rgb(169, 172, 173),
-                0px 10px 0 rgb(167, 170, 171),
-                0px 11px 0 rgb(164, 167, 168),
-                0px 12px 0 rgb(161, 164, 165),
-                0px 13px 0 rgb(158, 161, 162),
-                0px 14px 0 rgb(156, 159, 160),
-                0px 15px 0 rgb(153, 156, 157),
-                0px 16px 0 rgb(150, 153, 154),
-                0px 17px 0 rgb(147, 150, 151),
-                0px 18px 17px rgba(0, 0, 0, 0.15),
-                0px 18px 1px rgba(0, 0, 0, 0.5),
-                0px 0px 17px rgba(0, 0, 0, .2);
+                0px 5px 20px rgba(0, 0, 0, 0.6),
+                0 0 30px rgba(255, 230, 80, 0.05);
         }
 
-        /* 콘솔 화면 박스 */
+        /* ===== 질문 콘솔 박스 ===== */
         #wargames pre {
-            /* 폰트 명시적으로 적용 */
+            font-size: 25px;
             font-family: 'Black Han Sans', sans-serif;
-            border-radius: 30px;
-            border: 15px solid #0e122a;
+            color: #ffdf0e;
+            text-shadow: 0 0 5px #ffdf0e;
+            margin-top: 30px;
+            position: relative;
+
+            border-radius: 20px;
+            border: 10px solid #0e122a;
             background-color: #0b1b36;
             position: relative;
-            color: #f1bd00;
-            padding: 2em;
-            margin-top: 130px;
-            margin-bottom: 100px;
-            font-size: 18px;
-            box-shadow:
-                inset 0 0 0 9px rgba(33, 39, 79, 0.6),
-                0 1px 60px 10px rgba(40, 46, 40, 0.9),
-                inset 0 1px 80px 5px rgba(0, 0, 0, 0.97);
-        }
 
-        #wargames pre code {
-            /* 폰트 명시적으로 적용 */
-            font-family: 'Black Han Sans', sans-serif;
+            padding: 1.8em;
+            margin: 12vw 0 10vw 0;
+
+            color: #f1bd00;
+            font-size: clamp(16px, 4vw, 20px);
+            line-height: 1.4;
+
+            box-shadow:
+                inset 0 0 0 8px rgba(33, 39, 79, 0.6),
+                0 0 40px rgba(0, 0, 0, 0.7);
         }
 
         #wargames pre:before {
-            /* 폰트 적용 필요 없음 */
             content: "";
             width: 100%;
             height: 100%;
             position: absolute;
             top: 50%;
             left: 0;
-            background: linear-gradient(rgba(40, 66, 25, 0.2),
+            background: linear-gradient(rgba(40, 66, 25, 0.15),
                     rgba(159, 137, 0, 0) 70%,
-                    rgba(201, 185, 0, 0) 99%);
-            animation: scan 4s linear infinite;
+                    rgba(201, 185, 0, 0) 100%);
+
         }
 
-        @keyframes scan {
-            from {
-                top: -50%;
-            }
 
-            to {
-                top: 150%;
-            }
-        }
 
-        /* ===== 입력창 / 버튼 ===== */
+        /* ===== 입력 ===== */
         textarea {
-            width: 90%;
-            height: 120px;
+            width: 100%;
+            min-height: 120px;
             border: none;
-            border-radius: 10px;
-            padding: 10px;
-            margin-top: 20px;
-            font-size: 18px;
-            /* 폰트 명시적으로 'Black Han Sans' 적용 */
-            font-family: 'Black Han Sans', sans-serif;
+            border-radius: 12px;
+
+            font-size: clamp(15px, 4vw, 18px);
+            padding: 14px;
+            margin-top: 30vw;
+
             background: rgba(255, 255, 200, 0.1);
             color: #f1bd00;
-            outline: none;
             resize: none;
-            box-shadow: inset 0 0 10px #000;
+            outline: none;
+
+            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.7);
         }
 
+        /* ===== 버튼 ===== */
         button {
-            margin-top: 20px;
-            padding: 12px 25px;
-            font-size: 22px;
+            margin-top: 10vw;
+            padding: 12px 24px;
+            font-size: clamp(18px, 5vw, 22px);
+            text-shadow: 10 10 10px #ffdf0e;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             background: #f1bd00;
             color: #06152f;
+
+
             cursor: pointer;
-            /* 폰트 명시적으로 'Black Han Sans' 적용 */
-            font-family: 'Black Han Sans', sans-serif;
-            box-shadow: 0 0 10px #000;
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
+            transition: 0.2s;
         }
 
         button:hover {
-            background: #ffdd44;
+            background: #ffe65e;
         }
 
-        #tape {
-            position: absolute;
-            top: 70%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(70%, 300px);
-            opacity: 0.3;
-            mix-blend-mode: color-dodge;
-            z-index: 2000;
-            animation: blink 3s infinite;
-        }
-
-        @keyframes blink {
-            0% {
-                opacity: 0
+        @media (max-width: 480px) {
+            #wargames {
+                padding: 6vw;
             }
 
-            80% {
-                opacity: 0.3
+            #wargames pre {
+                padding: 1.5em;
+                margin: 18vw 0 12vw 0;
             }
-
-            100% {
-                opacity: 0
-            }
-        }
-
-        #tapeoff {
-            position: absolute;
-            bottom: 6%;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 40px;
-            color: #f1bd00;
-            text-shadow: 2px 3px 4px #162030;
-            /* 폰트 명시적으로 'Black Han Sans' 적용 */
-            font-family: 'Black Han Sans', sans-serif;
         }
     </style>
 </head>
 
 <body>
-
-
-
     <div id="wargames">
-        <pre><code>당신은 테이프 뒤에는 어떤 것이 있나요?</code></pre>
+        <pre><code>당신의 테이프 뒤에는 어떤 것이 있나요?</code></pre>
 
-        <textarea id="answer" placeholder="여기에 입력해주세요 |"></textarea>
+        <textarea id="answer" placeholder="여기에 입력해주세요|"></textarea>
 
         <button onclick="saveAnswer()">save</button>
     </div>
-
-
-
 
     <script>
         function saveAnswer() {
             const answer = document.getElementById('answer').value.trim();
             if (!answer) return;
-
             const saved = JSON.parse(localStorage.getItem('answers') || '[]');
             saved.push(answer);
             localStorage.setItem('answers', JSON.stringify(saved));
-
             window.location.href = "last2.html";
         }
     </script>
-
 </body>
 
 </html>
