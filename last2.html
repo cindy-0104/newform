@@ -4,146 +4,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>저장된 답변 목록</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gugi&display=swap" rel="stylesheet">
-
+    <title>랜덤 출력</title>
     <style>
-        /* ===== 기본 스타일 ===== */
         body {
             background: #06152f;
-            /* Wargames 배경 */
-            color: #ffffff;
-            font-family: 'Black Han Sans', 'Gugi', sans-serif;
+            color: #f1bd00;
             text-align: center;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            /* 스크롤바 방지 */
-            height: 100vh;
-            /* 뷰포트 전체 높이 사용 */
-            position: relative;
-        }
-
-        h3 {
-            font-size: 25px;
+            padding: 30px;
             font-family: 'Black Han Sans', sans-serif;
-            color: #ffdf0e;
-            text-shadow: 0 0 8px #ffdf0e;
-            top: 10%;
-            position: relative;
-            z-index: 100;
         }
 
-        #list {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-
-        /* ===== 둥둥 떠다니는 텍스트 스타일 ===== */
-        #list div {
-            font-size: clamp(14px, 2.5vw, 22px);
-            padding: 8px;
-            margin: 0;
-            position: absolute;
-
-            /* **수정: 텍스트가 길 때 자동으로 줄바꿈되도록 white-space 제거** */
-            max-width: 90%;
-            /* **수정: 화면 너비의 90%를 초과하지 않도록 제한** */
-
-            will-change: transform, opacity;
-
-            /* WARGAMES 스타일 텍스트 광택 */
-            color: #d9ecff;
-            text-shadow: 0 0 5px #ffdf0e;
-            opacity: 0.9;
+        .item {
+            margin: 20px auto;
+            padding: 15px;
+            border-radius: 12px;
+            max-width: 700px;
+            font-size: 22px;
+            background: rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
 
 <body>
-
-    <h3>TAPE OFF:</h3>
-
+    <h1>당신의 테이프 뒤에는...</h1>
     <div id="list"></div>
 
-    <script>
-        const stored = JSON.parse(localStorage.getItem('answers') || '[]');
-        const list = document.getElementById('list');
-        const shuffled = stored.sort(() => Math.random() - 0.5);
-        const selected = shuffled.slice(0, 10);
+    <script src="firebase.js" type="module"></script>
 
-        const placedElementsBounds = [];
+    <script type="module">
+        import { ref, get } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
 
-        function getApproxWidth(text) {
-            const baseWidth = 10;
-            const lengthFactor = text.length * 0.8;
-            return Math.min(40, baseWidth + lengthFactor);
-        }
+        const db = window._db;
 
-        function checkCollision(x, y, width, height) {
-            const safetyMargin = 3;
-            for (const b of placedElementsBounds) {
-                const collX = (x < b.x + b.width + safetyMargin) && (x + width > b.x - safetyMargin);
-                const collY = (y < b.y + b.height + safetyMargin) && (y + height > b.y - safetyMargin);
-                if (collX && collY) return true;
-            }
-            return false;
-        }
+        async function loadRandom() {
+            const snap = await get(ref(db, "answers"));
+            const list = document.getElementById("list");
 
-        // ✨ 랜덤 이동 경로 만드는 함수
-        function generateFloatKeyframes(id) {
-            const dx = (Math.random() * 40 - 20); // -20vw ~ +20vw
-            const dy = (Math.random() * 40 - 20); // -20vh ~ +20vh
-
-            return `
-        @keyframes float_${id} {
-            0%   { transform: translate(0, 0); }
-            50%  { transform: translate(${dx}vw, ${dy}vh); }
-            100% { transform: translate(0, 0); }
-        }`;
-        }
-
-        // ✨ 스타일 태그 동적 추가
-        const styleTag = document.createElement("style");
-        document.head.appendChild(styleTag);
-
-        selected.forEach((txt, index) => {
-            const div = document.createElement('div');
-            div.textContent = txt;
-            list.appendChild(div);
-
-            const approxWidth = getApproxWidth(txt);
-            const approxHeight = 8;
-
-            let left, top, tries = 50;
-            while (tries--) {
-                left = 5 + Math.random() * (90 - approxWidth);
-                top = 15 + Math.random() * (75 - approxHeight);
-
-                if (!checkCollision(left, top, approxWidth, approxHeight)) {
-                    div.style.left = `${left}vw`;
-                    div.style.top = `${top}vh`;
-
-                    placedElementsBounds.push({ x: left, y: top, width: approxWidth, height: approxHeight });
-                    break;
-                }
+            if (!snap.exists()) {
+                list.innerHTML = "<p>아직 아무도 기록하지 않았습니다.</p>";
+                return;
             }
 
-            // 요소마다 다른 애니메이션 생성
-            const keyframeCSS = generateFloatKeyframes(index);
-            styleTag.innerHTML += keyframeCSS;
+            const arr = Object.values(snap.val());
 
-            const duration = 15 + Math.random() * 15; // 15~30초
-            const delay = Math.random() * 4;          // 0~4초
+            // 랜덤 섞기
+            arr.sort(() => Math.random() - 0.5);
 
-            div.style.animation = `float_${index} ${duration}s ease-in-out ${delay}s infinite`;
-        });
+            // 10개만 출력
+            const selected = arr.slice(0, 10);
+
+            selected.forEach(t => {
+                const div = document.createElement("div");
+                div.className = "item";
+                div.textContent = t;
+                list.appendChild(div);
+            });
+        }
+
+        loadRandom();
     </script>
-
 </body>
 
 </html>

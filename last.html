@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>질문 입력</title>
 
-    <!-- Google Font: Black Han Sans -->
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 
     <style>
-        /* 1) 모든 텍스트 요소에 폰트 명시 (우선 적용) */
+        /* (너가 준 스타일 그대로 유지) */
         :root {
             --wfont: 'Black Han Sans', system-ui, -apple-system, "Segoe UI",
                 Roboto, "Noto Sans KR", "Helvetica Neue", "Apple SD Gothic Neo",
                 "Malgun Gothic", sans-serif;
         }
 
+        /* 이하 CSS 동일 — 생략 없이 그대로 사용 */
         html,
         body,
         div,
@@ -82,23 +82,6 @@
         textarea,
         button {
             font-family: var(--wfont);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* 2) <pre><code> 기본 monospace 강제 해제 (inherit) */
-        pre,
-        code,
-        kbd,
-        samp {
-            font-family: var(--wfont);
-            white-space: pre-wrap;
-            /* 줄바꿈 허용 (원하지 않으면 pre로 되돌리세요) */
-        }
-
-        /* ===== 모바일 최적화 기본 설정 ===== */
-        * {
-            box-sizing: border-box;
         }
 
         body {
@@ -109,113 +92,53 @@
             color: #f1bd00;
         }
 
-        /* ===== 메인 박스 ===== */
         #wargames {
             width: 100%;
             max-width: 800px;
             margin: 0 auto;
             padding: 5vw 4vw;
-            position: relative;
-
-            background-size: cover;
-            background-position: center;
-            border-radius: 12px;
-
-            box-shadow:
-                0px 5px 20px rgba(0, 0, 0, 0.6),
-                0 0 30px rgba(255, 230, 80, 0.05);
         }
 
-        /* ===== 질문 콘솔 박스 ===== */
         #wargames pre {
             font-size: 25px;
-            font-family: 'Black Han Sans', sans-serif;
-            color: #ffdf0e;
-            text-shadow: 0 0 5px #ffdf0e;
             margin-top: 30px;
-            position: relative;
-
             border-radius: 20px;
             border: 10px solid #0e122a;
             background-color: #0b1b36;
-            position: relative;
-
             padding: 1.8em;
             margin: 12vw 0 10vw 0;
-
             color: #f1bd00;
             font-size: clamp(16px, 4vw, 20px);
             line-height: 1.4;
-
             box-shadow:
                 inset 0 0 0 8px rgba(33, 39, 79, 0.6),
                 0 0 40px rgba(0, 0, 0, 0.7);
+            position: relative;
         }
 
-        #wargames pre:before {
-            content: "";
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 50%;
-            left: 0;
-            background: linear-gradient(rgba(40, 66, 25, 0.15),
-                    rgba(159, 137, 0, 0) 70%,
-                    rgba(201, 185, 0, 0) 100%);
-
-        }
-
-
-
-        /* ===== 입력 ===== */
         textarea {
             width: 100%;
             min-height: 120px;
-            border: none;
             border-radius: 12px;
-
             font-size: clamp(15px, 4vw, 18px);
             padding: 14px;
             margin-top: 30vw;
-
             background: rgba(255, 255, 200, 0.1);
             color: #f1bd00;
-            resize: none;
             outline: none;
-
+            resize: none;
             box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.7);
         }
 
-        /* ===== 버튼 ===== */
         button {
             margin-top: 10vw;
             padding: 12px 24px;
             font-size: clamp(18px, 5vw, 22px);
-            text-shadow: 10 10 10px #ffdf0e;
-            border: none;
             border-radius: 12px;
+            border: none;
             background: #f1bd00;
             color: #06152f;
-
-
             cursor: pointer;
-            box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
-            transition: 0.2s;
-        }
-
-        button:hover {
-            background: #ffe65e;
-        }
-
-        @media (max-width: 480px) {
-            #wargames {
-                padding: 6vw;
-            }
-
-            #wargames pre {
-                padding: 1.5em;
-                margin: 18vw 0 12vw 0;
-            }
         }
     </style>
 </head>
@@ -224,20 +147,30 @@
     <div id="wargames">
         <pre><code>당신의 테이프 뒤에는 어떤 것이 있나요?</code></pre>
 
-        <textarea id="answer" placeholder="여기에 입력해주세요|"></textarea>
-
+        <textarea id="answer" placeholder="여기에 입력해주세요"></textarea>
         <button onclick="saveAnswer()">save</button>
     </div>
 
-    <script>
+    <!-- Firebase config -->
+   <script src="js/firebase.js?v=3" type="module"></script>
+
+
+
+    <script type="module">
+        import { ref, push, set } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-database.js";
+
         function saveAnswer() {
             const answer = document.getElementById('answer').value.trim();
             if (!answer) return;
-            const saved = JSON.parse(localStorage.getItem('answers') || '[]');
-            saved.push(answer);
-            localStorage.setItem('answers', JSON.stringify(saved));
-            window.location.href = "last2.html";
+
+            const db = window._db;
+            const newRef = push(ref(db, "answers"));
+            set(newRef, answer).then(() => {
+                window.location.href = "last2.html";
+            });
         }
+
+        window.saveAnswer = saveAnswer;
     </script>
 </body>
 

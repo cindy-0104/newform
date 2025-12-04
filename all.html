@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>작가 리스트</title>
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gugi&display=swap" rel="stylesheet">
-
     <style>
         :root {
             --img-bill: url('tape.png');
@@ -45,14 +44,43 @@
             margin: 0;
             padding: 50px 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
+            align-items: center;
             font-family: 'Black Han Sans', sans-serif;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        #inst {
+            font-size: 12px;
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #c0a33c;
+            z-index: 100;
+        }
+
+        .container-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+        }
+
+        .container-top,
+        .container-bottom {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            width: 80%;
+            margin-bottom: 30px;
         }
 
         figure {
             display: inline-block;
             padding: 0;
-            margin: 0;
+            margin: 15px;
             position: relative;
         }
 
@@ -123,8 +151,7 @@
             --ratio-x: -1;
             --ratio-y: -1;
             pointer-events: auto;
-            transform:
-                translateX(calc(calc(var(--ratio-x) * var(--remaining)) + var(--dist))) translateY(calc(calc(var(--ratio-y) * var(--remaining)) + var(--dist)));
+            transform: translateX(calc(calc(var(--ratio-x) * var(--remaining)) + var(--dist))) translateY(calc(calc(var(--ratio-y) * var(--remaining)) + var(--dist)));
             mask: linear-gradient(var(--angle-deg), black var(--dist), transparent var(--dist));
             -webkit-mask-composite: destination-out;
             mask-composite: var(--angle);
@@ -179,7 +206,7 @@
             transition: pointer-events 0s linear var(--peel-duration);
         }
 
-        /* ---------------------- 뒤로 왔을때: 완전히 벗겨진 상태 ---------------------- */
+        /* ---------------------- peeled 상태 ---------------------- */
         .sticker_peel.peeled>.inner {
             --dist: 100% !important;
             transition: none !important;
@@ -199,13 +226,11 @@
             pointer-events: auto !important;
         }
 
-        /* 테이프가 있을 때는 클릭 막기 */
         .sticker .peel,
         .sticker .peel>.inner {
             pointer-events: auto !important;
         }
 
-        /* 벗겨진 상태에서는 아래 링크 클릭 허용 */
         .sticker_peel.peeled .peel,
         .sticker_peel.peeled .peel>.inner {
             pointer-events: none !important;
@@ -222,92 +247,289 @@
             text-shadow: 2px 3px 4px #162030;
             text-decoration: none;
         }
-
-        #caption {
-            color: white;
-        }
     </style>
 </head>
 
 <body>
+    <div id="inst">테이프 왼쪽 모서리를 클릭해 작가와 작품 설명을 엿보세요</div>
     <a id="opening" href="last.html">next</a>
 
-    <main class="container">
-        <figure>
-            <div class="sticker sticker_peel">
-                <div class="inner">
-                    <img src="tape.png" alt="" draggable="false">
-
-                    <div class="reveal">
-                        <div>
-                            <a id="portfolio" href="https://www.jangwooyou.com/" target="_blank">김경서</a>
-                            <a id="caption" href="caption.html">거룩한 대화</a>
+    <div class="container-wrapper">
+        <main class="container-top">
+            <figure data-id="1">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">김경서</a>
+                                <a href="caption.html">거룩한 거북한 대화</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
                         </div>
                     </div>
+                </div>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
 
-                    <div class="peel">
-                        <div class="inner"></div>
+            <figure data-id="2">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">김지수</a>
+                                <a href="caption.html">오리엔탈리티 데이터</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
 
-            <figcaption>
-                <div>
-                    <id="trans" Transition (hover)>
-                        </id>
+            <figure data-id="3">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">박현주</a>
+                                <a href="caption.html">불안 증진 요법</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
+                        </div>
+                    </div>
                 </div>
-            </figcaption>
-        </figure>
-    </main>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure data-id="4">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">안다은</a>
+                                <a href="caption.html">막은 틈에서</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure data-id="5">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">윤지연</a>
+                                <a href="caption.html">1-5-1</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
+        </main>
+
+        <main class="container-bottom">
+            <figure data-id="6">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">이경민</a>
+                                <a href="caption.html">불안 판타지</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure data-id="7">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">이소민</a>
+                                <a href="caption.html">의자 저 주세요</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure data-id="8">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">이채영</a>
+                                <a href="caption.html">인간탈락</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
+
+            <figure data-id="9">
+                <div class="sticker sticker_peel">
+                    <div class="inner">
+                        <img src="tape.png" alt="" draggable="false">
+                        <div class="reveal">
+                            <div>
+                                <a href="https://www.jangwooyou.com/" target="_blank">조은서</a>
+                                <a href="caption.html">통제불가영역</a>
+                            </div>
+                        </div>
+                        <div class="peel">
+                            <div class="inner"></div>
+                        </div>
+                    </div>
+                </div>
+                <figcaption>
+                    <div>
+                        <id="trans" Transition (hover)>
+                            </id>
+                    </div>
+                </figcaption>
+            </figure>
+        </main>
+    </div>
 
     <script>
         document.addEventListener("DOMContentLoaded", () => {
-            const sticker = document.querySelector(".sticker_peel");
+            const stickers = document.querySelectorAll(".sticker_peel");
             const links = document.querySelectorAll(".sticker_peel .reveal a");
+            const PEELED_KEY = "peeled_stickers";
 
-            /* 🔥 1) RELOAD 인 경우에만 peeled 상태 초기화 */
-            try {
-                const nav = performance.getEntriesByType("navigation")[0];
-                if (nav && nav.type === "reload") {
-                    sessionStorage.removeItem("peeled");
-                }
-            } catch (e) {
-                // 일부 브라우저 fallback
-                if (performance.navigation.type === 1) {
-                    sessionStorage.removeItem("peeled");
+            function getPeeledIds() {
+                const data = sessionStorage.getItem(PEELED_KEY);
+                return data ? JSON.parse(data) : [];
+            }
+
+            function savePeeledId(id) {
+                const ids = getPeeledIds();
+                if (!ids.includes(id)) {
+                    ids.push(id);
+                    sessionStorage.setItem(PEELED_KEY, JSON.stringify(ids));
                 }
             }
 
-            /* 🔥 2) peeled 상태 적용 */
             function applyPeeled() {
-                if (!sticker) return;
-                if (sessionStorage.getItem("peeled") === "1") {
-                    sticker.classList.add("peeled");
-                }
+                const ids = getPeeledIds();
+                stickers.forEach(sticker => {
+                    const id = sticker.closest("figure").dataset.id;
+                    if (ids.includes(id)) {
+                        sticker.classList.add("peeled");
+                    } else {
+                        sticker.classList.remove("peeled");
+                    }
+                });
+            }
+
+            // 새로고침 시 초기화 (원본 코드 유지)
+            try {
+                const nav = performance.getEntriesByType("navigation")[0];
+                if (nav && nav.type === "reload") sessionStorage.removeItem(PEELED_KEY);
+            } catch (e) {
+                if (performance.navigation.type === 1) sessionStorage.removeItem(PEELED_KEY);
             }
 
             applyPeeled();
+            window.addEventListener("pageshow", applyPeeled);
 
-            /* 🔥 3) pageshow — 뒤로가기(bfcache 복원) 시에도 상태 유지 */
-            window.addEventListener("pageshow", () => {
-                applyPeeled();
-            });
-
-            /* 🔥 4) 링크 클릭하면 peeled 저장 */
-            links.forEach(link => {
-                link.addEventListener("click", () => {
-                    sessionStorage.setItem("peeled", "1");
+            // 🔥 수정: 클릭 시 클래스(`.peeled`)를 즉시 추가하는 코드를 제거했습니다.
+            // 대신, 상태만 저장하고 애니메이션은 CSS의 :hover와 transition에 맡깁니다.
+            stickers.forEach(sticker => {
+                sticker.addEventListener("click", () => {
+                    const id = sticker.closest("figure").dataset.id;
+                    savePeeledId(id);
+                    // sticker.classList.add("peeled"); <--- 이 코드를 제거하여 애니메이션 복구
                 });
             });
 
-            /* 🔥 5) 스티커 클릭해서 벗겨도 peeled 저장 (필수 아닐 수 있음) */
-            sticker.addEventListener("click", () => {
-                sessionStorage.setItem("peeled", "1");
+            // 🔥 수정: 링크 클릭 시에도 클래스(`.peeled`)를 즉시 추가하는 코드를 제거했습니다.
+            links.forEach(link => {
+                link.addEventListener("click", e => {
+                    const sticker = e.target.closest(".sticker_peel");
+                    const id = sticker.closest("figure").dataset.id;
+                    savePeeledId(id);
+                    // sticker.classList.add("peeled"); <--- 이 코드를 제거하여 애니메이션 복구
+                });
             });
         });
     </script>
-
-
 </body>
 
 </html>
