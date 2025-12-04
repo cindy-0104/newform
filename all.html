@@ -36,9 +36,9 @@ body {
 
 /* 🔥 안내문 위치 고정 */
 #inst {
-    font-size: 13px;
+    font-size: 14px;
     position: fixed;
-    top: 14px;
+    top: 39px;
     left: 50%;
     transform: translateX(-50%);
     color: #c0a33c;
@@ -54,12 +54,12 @@ body {
     transform: translateX(-50%);
     background: rgba(255, 210, 120, 0.28);
     padding: 10px 26px;
-    border: 1px solid #c0a33c;
+
     border-radius: 12px;
     color: #ffeec0;
     font-size: 18px;
     text-decoration: none;
-    text-shadow: 2px 3px 4px #162030;
+
     backdrop-filter: blur(3px);
     z-index: 999;
 }
@@ -169,6 +169,47 @@ figcaption {
     z-index: 3;
     pointer-events: auto;
 }
+/* figure 공통 – 기본 위치를 상대 기준 */
+figure {
+    position: relative;
+    margin: 25px;
+}
+
+/* 각 figure에 고유한 회전 + 좌우/상하 랜덤 오프셋 부여 */
+figure[data-id="1"] .sticker { 
+    transform: rotate(-4deg) translate(-5px, 2px);
+}
+figure[data-id="2"] .sticker { 
+    transform: rotate(3deg) translate(8px, -6px);
+}
+figure[data-id="3"] .sticker { 
+    transform: rotate(-7deg) translate(-10px, 4px);
+}
+figure[data-id="4"] .sticker { 
+    transform: rotate(5deg) translate(12px, 10px);
+}
+figure[data-id="5"] .sticker { 
+    transform: rotate(-6deg) translate(-6px, -8px);
+}
+
+figure[data-id="6"] .sticker { 
+    transform: rotate(4deg) translate(5px, 12px);
+}
+figure[data-id="7"] .sticker { 
+    transform: rotate(-3deg) translate(-8px, 5px);
+}
+figure[data-id="8"] .sticker { 
+    transform: rotate(7deg) translate(10px, -4px);
+}
+figure[data-id="9"] .sticker { 
+    transform: rotate(-5deg) translate(-12px, 6px);
+}
+
+/* hover 시에도 부드럽게 위로 뜨도록 유지 */
+.sticker:hover .tape-img {
+    transform: translateY(-6px) scale(1.02);
+}
+
 </style>
 </head>
 

@@ -36,14 +36,72 @@
             font-size: 13px;
             
         }
-     
-           
+/* ✨ 텍스트 은은하게 빛나도록 */
+.item {
+    position: relative;
+    color: #ffeaa7;
+    text-shadow: 0 0 2px #ffdd6e, 0 0 1px #ffca3a;
+    opacity: 0.92;
 
-        
+    /* 둥둥 떠다니는 애니메이션 (딜레이 없음) */
+    animation: float 5.5s ease-in-out infinite;
+}
+
+/* ✨ 위아래로 은근하게 떠다니는 애니메이션 */
+@keyframes float {
+    0%   { transform: translateY(0px); }
+    50%  { transform: translateY(-14px); }
+    100% { transform: translateY(0px); }
+}
+
+/* 리스트 컨테이너는 유지 */
+#list {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* ✨ 각 item이 처음부터 서로 다른 좌표에서 등장 */
+#list .item {
+    position: relative;
+    animation-delay: 0s; /* 즉시 애니메이션 실행 */
+    animation-duration: calc(5.5s + (var(--i) * 0.15s));
+}
+
+/* 서로 겹치지 않는 랜덤한 시작 위치 지정 */
+#list .item:nth-child(1)  { transform: translate(-10px, -5px);  --i:1; }
+#list .item:nth-child(2)  { transform: translate(20px, 0px);   --i:2; }
+#list .item:nth-child(3)  { transform: translate(-25px, 8px);  --i:3; }
+#list .item:nth-child(4)  { transform: translate(15px, -12px); --i:4; }
+#list .item:nth-child(5)  { transform: translate(-5px, 15px);  --i:5; }
+#list .item:nth-child(6)  { transform: translate(28px, 10px);  --i:6; }
+#list .item:nth-child(7)  { transform: translate(-18px, 20px); --i:7; }
+#list .item:nth-child(8)  { transform: translate(8px, -18px);  --i:8; }
+#list .item:nth-child(9)  { transform: translate(-30px, 2px);  --i:9; }
+#list .item:nth-child(10) { transform: translate(12px, -8px);  --i:10; }
+
+  #opening {
+    position: fixed;
+    bottom: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255, 210, 120, 0.28);
+    padding: 10px 26px;
+
+    border-radius: 12px;
+    color: #ffeec0;
+    font-size: 18px;
+    text-decoration: none;
+
+    backdrop-filter: blur(3px);
+    z-index: 999;
+}      
     </style>
 </head>
 
 <body>
+    <a id="opening" href="last.html">back</a>
       <div id="title">TAPE OFF:</div>
     <div id="list"></div>
 
