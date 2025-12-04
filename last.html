@@ -9,144 +9,82 @@
     <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
 
     <style>
-        /* (너가 준 스타일 그대로 유지) */
-        :root {
-            --wfont: 'Black Han Sans', system-ui, -apple-system, "Segoe UI",
-                Roboto, "Noto Sans KR", "Helvetica Neue", "Apple SD Gothic Neo",
-                "Malgun Gothic", sans-serif;
-        }
-       
-
-
-        /* 이하 CSS 동일 — 생략 없이 그대로 사용 */
-        html,
-        body,
-        div,
-        span,
-        applet,
-        object,
-        iframe,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6,
-        p,
-        blockquote,
-        pre,
-        a,
-        abbr,
-        acronym,
-        address,
-        big,
-        cite,
-        code,
-        del,
-        dfn,
-        em,
-        img,
-        ins,
-        kbd,
-        q,
-        s,
-        samp,
-        small,
-        strike,
-        strong,
-        sub,
-        sup,
-        tt,
-        var,
-        b,
-        u,
-        i,
-        center,
-        dl,
-        dt,
-        dd,
-        ol,
-        ul,
-        li,
-        fieldset,
-        form,
-        label,
-        legend,
-        table,
-        caption,
-        tbody,
-        tfoot,
-        thead,
-        tr,
-        th,
-        td,
-        input,
-        textarea,
-        button {
-            font-family: var(--wfont);
-        }
-
-        body {
-            position: relative;
+     * {
+    font-family: 'Black Han Sans', sans-serif !important;
+    font-weight: 400;
+}
+  body {
+    position: relative;
     color: #fff2c7;
     text-shadow: 0 0 4px #ffbf0f;
 
-           
-            background: #06152f;
-            text-align: center;
-            margin: 0;
-            padding: 0;
-           
-        }
+    background: #06152f;
+    text-align: center;
+    margin: 0;
+    padding: 0;
 
-        #wargames {
-            width: 100%;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 5vw 4vw;
-        }
+    /* 🔥 키보드 열릴 때도 레이아웃 깨지지 않도록 */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
 
-        #wargames pre {
-          
-            font-size: 25px;
-            margin-top: 30px;
-            border-radius: 20px;
-            border: 10px solid #0e122a;
-            background-color: #0b1b36;
-            padding: 1.8em;
-            margin: 12vw 0 10vw 0;
-            color: #f1bd00;
-            font-size: clamp(16px, 4vw, 20px);
-            line-height: 1.4;
-            box-shadow:
-                inset 0 0 0 8px rgba(33, 39, 79, 0.6),
-                0 0 40px rgba(0, 0, 0, 0.7);
-            position: relative;
-        }
+/* ◆ 콘텐츠 박스 */
+#wargames {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    box-sizing: border-box;
+}
 
-        textarea {
-            width: 100%;
-            min-height: 120px;
-            border-radius: 12px;
-            font-size: clamp(15px, 4vw, 18px);
-            padding: 14px;
-            margin-top: 30vw;
-            background: rgba(255, 255, 200, 0.1);
-            text-shadow:#ffdc5f;
-            color: #f1bd00;
-            outline: none;
-            resize: none;
-            box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.7);
-        }
+/* ◆ 질문 박스 */
+#wargames pre {
+    font-size: 22px;
+    border-radius: 20px;
+    border: 8px solid #0e122a;
+    background-color: #0b1b36;
+    padding: 1.6em;
+    margin: 50px 0;
+    color: #f1bd00;
+    font-size: clamp(16px, 4vw, 20px);
+    line-height: 1.4;
+    box-shadow:
+        inset 0 0 0 6px rgba(33, 39, 79, 0.6),
+        0 0 40px rgba(0, 0, 0, 0.7);
+    word-break: keep-all;
+}
 
-        button {
-          position: fixed;
-    bottom: 30%;
+/* ◆ 입력창 */
+textarea {
+    width: 100%;
+    min-height: 140px;
+
+    border-radius: 12px;
+    font-size: clamp(15px, 4vw, 18px);
+    padding: 14px;
+
+    margin-top: 40px;
+    background: rgba(255, 255, 200, 0.1);
+    color: #f1bd00;
+
+    outline: none;
+    resize: none;
+    box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.7);
+
+    /* 🔥 모바일 가로 스크롤 막기 */
+    box-sizing: border-box;
+}
+
+/* ◆ 저장 버튼 */
+button {
+    position: fixed;
+    bottom: 5%;           /* 🔥 모바일에서 가려지지 않도록 */
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(255, 210, 120, 0.28);
-    padding: 10px 26px;
 
+    background: rgba(255, 210, 120, 0.28);
+    padding: 12px 28px;
     border-radius: 12px;
     color: #ffeec0;
     font-size: 18px;
@@ -154,7 +92,33 @@
 
     backdrop-filter: blur(3px);
     z-index: 999;
-        }
+
+    /* 🔥 모바일에서 클릭 잘 되도록 */
+    touch-action: manipulation;
+}
+
+/* ▲ 작은 화면 대응 */
+@media (max-width: 480px) {
+    #wargames {
+        padding: 30px 16px;
+    }
+
+    #wargames pre {
+        margin: 30px 0;
+        padding: 1.2em;
+    }
+
+    textarea {
+        min-height: 130px;
+    }
+
+    button {
+        bottom: 4%;
+        font-size: 16px;
+        padding: 10px 22px;
+    }
+}
+
     </style>
 </head>
 

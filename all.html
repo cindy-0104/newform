@@ -30,7 +30,8 @@ body {
     align-items: center;
     font-family: 'Black Han Sans', sans-serif;
     min-height: 100vh;
-    position: relative;
+    position: absolute;
+   overflow-x:hidden;
     overflow-y: auto;        /* 🔥 스크롤 허용 */
 }
 
@@ -39,7 +40,7 @@ body {
     font-size: 14px;
     position: fixed;
     top: 39px;
-    left: 50%;
+    left: 60%;
     transform: translateX(-50%);
     color: #c0a33c;
     z-index: 999;
@@ -49,8 +50,8 @@ body {
 /* 🔥 next 버튼 고정 */
 #opening {
     position: fixed;
-    bottom: 25px;
-    left: 50%;
+    bottom: 30%;
+    left: 70%;
     transform: translateX(-50%);
     background: rgba(255, 210, 120, 0.28);
     padding: 10px 26px;
@@ -105,7 +106,7 @@ figcaption {
     cursor: pointer;
     user-select: none;
 
-    width: 80vw;
+    width: 90vw;
     max-width: 240px;
     height: calc(80vw * 0.46);
     max-height: 110px;
@@ -147,7 +148,7 @@ figcaption {
 .sticker .reveal a {
     color: #ffcc00;
     text-decoration: none;
-    margin: 2px 0;
+    margin: 22px 0;
 }
 
 /* 🔥 이름 더 밝게 강조 */
@@ -177,33 +178,36 @@ figure {
 
 /* 각 figure에 고유한 회전 + 좌우/상하 랜덤 오프셋 부여 */
 figure[data-id="1"] .sticker { 
-    transform: rotate(-4deg) translate(-5px, 2px);
+    transform: rotate(-4deg) translate(-75px, 2px);
+    scale:110%;
 }
 figure[data-id="2"] .sticker { 
-    transform: rotate(3deg) translate(8px, -6px);
+    transform: rotate(18deg) translate(50px, -20px);
+    opacity:80%;
 }
 figure[data-id="3"] .sticker { 
-    transform: rotate(-7deg) translate(-10px, 4px);
+    transform: rotate(-20deg) translate(-18px, -24px);
 }
 figure[data-id="4"] .sticker { 
-    transform: rotate(5deg) translate(12px, 10px);
+    transform: rotate(15deg) translate(52px, -30px);
+    scale:120%
 }
 figure[data-id="5"] .sticker { 
-    transform: rotate(-6deg) translate(-6px, -8px);
-}
+    transform: rotate(-10deg) translate(-63px, -68px);
+opacity:80%; scale:110%;}
 
 figure[data-id="6"] .sticker { 
-    transform: rotate(4deg) translate(5px, 12px);
+    transform: rotate(34deg) translate(20px, -130px);
 }
 figure[data-id="7"] .sticker { 
-    transform: rotate(-3deg) translate(-8px, 5px);
-}
+    transform: rotate(13deg) translate(-108px, -135px);
+opacity:80%; scale:110%;}
 figure[data-id="8"] .sticker { 
-    transform: rotate(7deg) translate(10px, -4px);
+    transform: rotate(-27deg) translate(150px, -129px);
 }
 figure[data-id="9"] .sticker { 
-    transform: rotate(-5deg) translate(-12px, 6px);
-}
+    transform: rotate(-5deg) translate(-12px, -156px);
+opacity:80%; scale:120%;}
 
 /* hover 시에도 부드럽게 위로 뜨도록 유지 */
 .sticker:hover .tape-img {
@@ -214,7 +218,8 @@ figure[data-id="9"] .sticker {
 </head>
 
 <body>
-    <div id="inst">테이프를 클릭해 작가와 작품 설명 엿보기</div>
+    <div id="inst">테이프를 벗겨 작가와 작품 설명 클릭<p><a id="scroll">scroll down for more</a></p></div>
+    
     <a id="opening" href="last.html">next</a>
 
     <div class="container-wrapper">
@@ -223,7 +228,7 @@ figure[data-id="9"] .sticker {
                 <div class="sticker sticker_peel">
                     <div class="tape-img"></div>
                     <div class="reveal">
-                        <a href="https://www.jangwooyou.com/" target="_blank">김경서</a>
+                        <a href="https://www.instagram.com/kangseowork/" target="_blank">김경서</a>
                         <a href="caption.html">거룩한 거북한 대화</a>
                     </div>
                 </div>
