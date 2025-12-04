@@ -5,7 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>랜덤 출력</title>
+    <link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap" rel="stylesheet">
+
     <style>
+        /* (너가 준 스타일 그대로 유지) */
+        :root {
+            --wfont: 'Black Han Sans', system-ui, -apple-system, "Segoe UI",
+                Roboto, "Noto Sans KR", "Helvetica Neue", "Apple SD Gothic Neo",
+               ;
+        }
+
         body {
             background: #06152f;
             color: #f1bd00;
@@ -13,20 +22,29 @@
             padding: 30px;
             font-family: 'Black Han Sans', sans-serif;
         }
+#title{
+    font-size:40px;
+            color: #ffc904;
+            z-index: 1000;
+            text-shadow: 0px 0px 20px #c89300;}
 
         .item {
             margin: 20px auto;
-            padding: 15px;
+            padding: 12px;
             border-radius: 12px;
             max-width: 700px;
-            font-size: 22px;
-            background: rgba(255, 255, 255, 0.05);
+            font-size: 13px;
+            
         }
+     
+           
+
+        
     </style>
 </head>
 
 <body>
-    <h1>당신의 테이프 뒤에는...</h1>
+      <div id="title">TAPE OFF:</div>
     <div id="list"></div>
 
     <script src="firebase.js" type="module"></script>
